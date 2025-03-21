@@ -1,6 +1,7 @@
 // =========== This part is required: =========== 
 // This constant can be changed while you are experimenting, but it should be set back to 10 for the Bakeoff:
 const tasksLength = 10;
+const canvasSize = 500;
 
 // As with Bakeoff 1, this code uses the svg.js library; documentation at: https://svgjs.dev/docs/3.0/
 // Create an svg div that is the specified size, in the div with ID "main". (Centering it on the page is handled by CSS.)
