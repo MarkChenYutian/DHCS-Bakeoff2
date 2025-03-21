@@ -82,16 +82,18 @@ sizeSlider.addEventListener('input', () => {
         let newSize = parseFloat(sizeSlider.value);
         // Visually resize the square
         currentSquare.size(newSize, newSize);
-        // Update task's size data
         currentTask.start.size = newSize;
+
+// Re-center manipulator after resizing
+manipulator.center(currentSquare.cx(), currentSquare.cy());
     }
 });
 
 rotateSlider.addEventListener('input', () => {
     if (currentSquare) {
         let newRotation = parseFloat(rotateSlider.value);
-        manipulator.rotate(0); // Reset rotation
-        manipulator.rotate(newRotation); //Apply new rotation cleanly
+        manipulator.transform({ rotation: 0 }); // Reset rotation cleanly
+        manipulator.rotate(newRotation);  
         currentTask.start.rotation = newRotation;
     }
 });
@@ -121,18 +123,13 @@ judge.on("newTask", () => {
     rotateSlider.value = task.start.rotation;
 
     task.start.square.size(task.start.size, task.start.size);
-    manipulator.rotate(0); // Reset rotation first
-    manipulator.rotate(task.start.rotation); // Apply start rotation    
+    manipulator.transform({ rotation: 0 }); // Reset rotation cleanly
+    manipulator.rotate(task.start.rotation);  
 
     
-    // event handlers for dragging
-    let squareClickHandler = function() {
-        console.log("Click!");
-    }
-    task.start.square.on("click", squareClickHandler);
 
-    task.start.square.on("mousedown", (e) => {
-        squareBeingClicked = true;
+    svg.on("mouseup", () => {
+        squareBeingClicked = false;
     });
 
     task.start.square.on("mouseup", (e) => {
