@@ -6,10 +6,34 @@ const tasksLength = 10;
 // Create an svg div that is the specified size, in the div with ID "main". (Centering it on the page is handled by CSS.)
 // The "size" attribute here is specified as a string.
 let svg = SVG().addTo('#main').size(""+canvasSize+"px", ""+canvasSize+"px");
+let controller_handle = document.getElementById("control-state");
 
 // Initialize the "judge" object with the number of tasks per trial, your svg drawing area, and a team name.
 const judge = new Judge(tasksLength, svg, "teamName");
 // =========== /end required =========== 
+
+// The original footer button are too ugly, hacked to fix that.
+const footer = document.querySelector("footer")
+footer.parentNode.removeChild(footer);
+const control_panel = document.getElementById("control-panel");
+control_panel.appendChild(footer);
+
+const reset_btn = footer.children[0];
+const next_btn = footer.children[1];
+console.log(next_btn.innerHTML)
+next_btn.innerHTML = 'Next Task';
+reset_btn.innerHTML = 'Reset';
+next_btn.parentNode.removeChild(next_btn);
+reset_btn.parentNode.removeChild(reset_btn);
+button_container = document.createElement("div");
+button_container.appendChild(next_btn);
+button_container.appendChild(reset_btn);
+button_container.style = 'display: flex; justify-content: space-around; width: 100%;';
+next_btn.style = 'background-color: #4CAF50; color: white; border: none; cursor: pointer;';
+reset_btn.style = 'background-color: #f44336; color: white; border: none; cursor: pointer;';
+control_panel.appendChild(button_container);
+//
+
 
 // Events you can assign handlers to:
 // 		score: when a task is scored
@@ -50,6 +74,8 @@ const judge = new Judge(tasksLength, svg, "teamName");
 
 // Here are some consts just for this example code:
 const startColor = "#6677ee";
+const active_borderColor = "#F00";
+const inactive_borderColor = "#777";
 const goalColor = "#777";
 
 // And a global variable for dragging
@@ -83,17 +109,16 @@ judge.on("newTask", () => {
     // add some event handlers to the square
     // https://svgjs.dev/docs/3.0/events/#event-listeners
     let squareClickHandler = function() {
-        console.log("Click!");
+        squareBeingClicked = squareBeingClicked ? false : true;
+        if (squareBeingClicked) {
+            task.start.square.stroke({color: active_borderColor, width: 2});
+            controller_handle.innerHTML = "Active";
+        } else {
+            task.start.square.stroke({color: inactive_borderColor, width: 2});
+            controller_handle.innerHTML = "Inactive";
+        }
     }
     task.start.square.on("click", squareClickHandler);
-
-    task.start.square.on("mousedown", (e)=> {
-        squareBeingClicked = true;
-    });
-
-    task.start.square.on("mouseup", (e)=> {
-        squareBeingClicked = false;
-    });
 });
 
 // once you've got your handlers set up, start it up:
