@@ -1,7 +1,6 @@
 // =========== This part is required: =========== 
 // This constant can be changed while you are experimenting, but it should be set back to 10 for the Bakeoff:
 const tasksLength = 10;
-const canvasSize = 500;
 
 // As with Bakeoff 1, this code uses the svg.js library; documentation at: https://svgjs.dev/docs/3.0/
 // Create an svg div that is the specified size, in the div with ID "main". (Centering it on the page is handled by CSS.)
@@ -76,24 +75,24 @@ svg.on("mousemove", (e)=>{
     }
 })
 
-// When user moves the size slider, resize the square
+// Handle size slider input
 sizeSlider.addEventListener('input', () => {
     if (currentSquare) {
         let newSize = parseFloat(sizeSlider.value);
         // Visually resize the square
         currentSquare.size(newSize, newSize);
+        // Update task's size data
         currentTask.start.size = newSize;
-
-// Re-center manipulator after resizing
-manipulator.center(currentSquare.cx(), currentSquare.cy());
     }
 });
 
+// Handle rotation slider input: rotate the square when slider changes
 rotateSlider.addEventListener('input', () => {
     if (currentSquare) {
         let newRotation = parseFloat(rotateSlider.value);
-        manipulator.transform({ rotation: 0 }); // Reset rotation cleanly
-        manipulator.rotate(newRotation);  
+        // Rotate the group
+        manipulator.rotate(newRotation);
+        // Update task data
         currentTask.start.rotation = newRotation;
     }
 });
@@ -102,37 +101,46 @@ rotateSlider.addEventListener('input', () => {
 judge.on("newTask", () => {
     // get the next task
     let task = judge.getCurrentTask();
-    currentTask = task; // Save current task globally
-    currentSquare = task.start.square; // Save current square globally
-    
+
     // style the start and goal squares
     task.start.square.fill(startColor);
     task.goal.square.fill('none');
     task.goal.square.stroke(goalColor);
 
     // add the new squares to the groups
-    manipulator.clear(); // Clear manipulator to remove old square
     manipulator.add(task.start.square);
     goal.add(task.goal.square);
-
-    // Set manipulator position to start position
-    manipulator.center(task.start.position.x, task.start.position.y);
 
      // ======== NEW: Set sliders to current start values ========
     sizeSlider.value = task.start.size;
     rotateSlider.value = task.start.rotation;
 
-    task.start.square.size(task.start.size, task.start.size);
-    manipulator.transform({ rotation: 0 }); // Reset rotation cleanly
-    manipulator.rotate(task.start.rotation);  
+    // event handlers for dragging
+    let squareClickHandler = function() {
+        console.log("Click!");
+    }
+    task.start.square.on("click", squareClickHandler);
 
-    
-
-    svg.on("mouseup", () => {
-        squareBeingClicked = false;
+    task.start.square.on("mousedown", (e) => {
+        squareBeingClicked = true;
     });
 
     task.start.square.on("mouseup", (e) => {
+        squareBeingClicked = false;
+    });
+//comment
+    // add some event handlers to the square
+    // https://svgjs.dev/docs/3.0/events/#event-listeners
+    let squareClickHandler = function() {
+        console.log("Click!");
+    }
+    task.start.square.on("click", squareClickHandler);
+
+    task.start.square.on("mousedown", (e)=> {
+        squareBeingClicked = true;
+    });
+
+    task.start.square.on("mouseup", (e)=> {
         squareBeingClicked = false;
     });
 });
