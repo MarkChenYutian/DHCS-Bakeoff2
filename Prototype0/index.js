@@ -55,9 +55,18 @@ const goalColor = "#777";
 // And a global variable for dragging
 let squareBeingClicked = false;
 
+
+//// Global variables for dragging
+let currentTask; // Holds the current task object (start & goal info)
+let currentSquare; // Holds the current square SVG element
+
 // These "SVG groups" will hold the squares. I could put other things in these groups, and then everything would move together.
 let manipulator = svg.group();
 let goal = svg.group();
+
+// Get references to size and rotation sliders
+const sizeSlider = document.getElementById('sizeSlider');
+const rotateSlider = document.getElementById('rotateSlider');
 
 // Any time the mouse moves over the svg area...
 svg.on("mousemove", (e)=>{
@@ -65,6 +74,28 @@ svg.on("mousemove", (e)=>{
         manipulator.center(e.offsetX, e.offsetY);
     }
 })
+
+// Handle size slider input
+sizeSlider.addEventListener('input', () => {
+    if (currentSquare) {
+        let newSize = parseFloat(sizeSlider.value);
+        // Visually resize the square
+        currentSquare.size(newSize, newSize);
+        // Update task's size data
+        currentTask.start.size = newSize;
+    }
+});
+
+// Handle rotation slider input: rotate the square when slider changes
+rotateSlider.addEventListener('input', () => {
+    if (currentSquare) {
+        let newRotation = parseFloat(rotateSlider.value);
+        // Rotate the group
+        manipulator.rotate(newRotation);
+        // Update task data
+        currentTask.start.rotation = newRotation;
+    }
+});
 
 // When a new task is assigned, run this...
 judge.on("newTask", () => {
