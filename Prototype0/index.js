@@ -75,7 +75,7 @@ svg.on("mousemove", (e)=>{
     }
 })
 
-// Handle size slider input
+// When user moves the size slider, resize the square
 sizeSlider.addEventListener('input', () => {
     if (currentSquare) {
         let newSize = parseFloat(sizeSlider.value);
@@ -86,13 +86,11 @@ sizeSlider.addEventListener('input', () => {
     }
 });
 
-// Handle rotation slider input: rotate the square when slider changes
 rotateSlider.addEventListener('input', () => {
     if (currentSquare) {
         let newRotation = parseFloat(rotateSlider.value);
-        // Rotate the group
-        manipulator.rotate(newRotation);
-        // Update task data
+        manipulator.rotate(0); // Reset rotation
+        manipulator.rotate(newRotation); //Apply new rotation cleanly
         currentTask.start.rotation = newRotation;
     }
 });
@@ -110,17 +108,22 @@ judge.on("newTask", () => {
     task.goal.square.stroke(goalColor);
 
     // add the new squares to the groups
+    manipulator.clear(); // Clear manipulator to remove old square
     manipulator.add(task.start.square);
     goal.add(task.goal.square);
+
+    // Set manipulator position to start position
+    manipulator.center(task.start.position.x, task.start.position.y);
 
      // ======== NEW: Set sliders to current start values ========
     sizeSlider.value = task.start.size;
     rotateSlider.value = task.start.rotation;
 
-    // Apply initial size and rotation visually
     task.start.square.size(task.start.size, task.start.size);
-    manipulator.rotate(task.start.rotation);
+    manipulator.rotate(0); // Reset rotation first
+    manipulator.rotate(task.start.rotation); // Apply start rotation    
 
+    
     // event handlers for dragging
     let squareClickHandler = function() {
         console.log("Click!");
@@ -132,21 +135,6 @@ judge.on("newTask", () => {
     });
 
     task.start.square.on("mouseup", (e) => {
-        squareBeingClicked = false;
-    });
-//comment
-    // add some event handlers to the square
-    // https://svgjs.dev/docs/3.0/events/#event-listeners
-    let squareClickHandler = function() {
-        console.log("Click!");
-    }
-    task.start.square.on("click", squareClickHandler);
-
-    task.start.square.on("mousedown", (e)=> {
-        squareBeingClicked = true;
-    });
-
-    task.start.square.on("mouseup", (e)=> {
         squareBeingClicked = false;
     });
 });
