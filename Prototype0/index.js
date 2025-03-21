@@ -101,7 +101,9 @@ rotateSlider.addEventListener('input', () => {
 judge.on("newTask", () => {
     // get the next task
     let task = judge.getCurrentTask();
-
+    currentTask = task; // Save current task globally
+    currentSquare = task.start.square; // Save current square globally
+    
     // style the start and goal squares
     task.start.square.fill(startColor);
     task.goal.square.fill('none');
@@ -114,6 +116,10 @@ judge.on("newTask", () => {
      // ======== NEW: Set sliders to current start values ========
     sizeSlider.value = task.start.size;
     rotateSlider.value = task.start.rotation;
+
+    // Apply initial size and rotation visually
+    task.start.square.size(task.start.size, task.start.size);
+    manipulator.rotate(task.start.rotation);
 
     // event handlers for dragging
     let squareClickHandler = function() {
