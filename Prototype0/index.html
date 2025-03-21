@@ -32,24 +32,17 @@
 		<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 	</head>
 
-	<body>
-    <!-- SVG Canvas -->
-    <div id="main"></div>
-
-    <!-- FOOTER: Sliders for Rotation & Scale -->
-    <footer class="flex flex-col space-y-4 bg-gray-100 p-4 w-full">
-        <div class="flex items-center justify-center space-x-4">
-            <label for="rotation" class="text-lg mr-2">Rotation:</label>
-            <input type="range" id="rotation" min="0" max="360" value="0" class="w-72 h-3">
-        </div>
-        <div class="flex items-center justify-center space-x-4">
-            <label for="scale" class="text-lg mr-2">Scale:</label>
-            <input type="range" id="scale" min="50" max="200" value="100" class="w-72 h-3">
-        </div>
-    </footer>
 		
 	<body>
 		<div id="main"></div>
+		<div class="mt-4">
+		        <label for="sizeSlider">Size:</label>
+		        <input type="range" id="sizeSlider" min="20" max="300" value="100">
+		        <br><br>
+		        <label for="rotateSlider">Rotation:</label>
+		        <input type="range" id="rotateSlider" min="0" max="360" value="0">
+		</div>
+	
 	</body>
 	<script src="index.js"></script>
 </html>
