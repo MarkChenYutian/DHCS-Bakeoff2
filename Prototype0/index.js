@@ -57,8 +57,8 @@ scaleLabel.style.display = "block";
 
 let scaleSlider = document.createElement("input");
 scaleSlider.type = "range";
-scaleSlider.min = "50";  // 50%
-scaleSlider.max = "200"; // 200%
+scaleSlider.min = "10";  // 10%
+scaleSlider.max = "400"; // 400%
 scaleSlider.value = "100";
 scaleSlider.style.width = "100%";
 
@@ -141,26 +141,35 @@ judge.on("newTask", () => {
     manipulator.add(task.start.square);
     goal.add(task.goal.square);
 
-     // Reset transforms and sliders when new task starts
-    task.start.square.transform({rotation: 0, scale: 1});
+    // Reset manipulator transform and sliders when new task starts
+    manipulator.transform({rotation: 0, scale: 1});
     rotateSlider.value = "0";
     scaleSlider.value = "100";
 
     // ---- Rotation Slider Handler ----
     rotateSlider.oninput = function() {
-        task.start.square.transform({
+        // Get current translation to keep square in same position
+        let currentTransform = manipulator.transform();
+        manipulator.transform({
             rotation: this.value,
-            scale: scaleSlider.value / 100
+            scale: scaleSlider.value / 100,
+            translateX: currentTransform.translateX,
+            translateY: currentTransform.translateY
+        });
+    }
+    
+    // ---- Scale Slider Handler ----
+    scaleSlider.oninput = function() {
+        // Get current translation to keep square in same position
+        let currentTransform = manipulator.transform();
+        manipulator.transform({
+            scale: this.value / 100,
+            rotation: rotateSlider.value,
+            translateX: currentTransform.translateX,
+            translateY: currentTransform.translateY
         });
     }
 
-    // ---- Scale Slider Handler ----
-    scaleSlider.oninput = function() {
-        task.start.square.transform({
-            scale: this.value / 100,
-            rotation: rotateSlider.value
-        });
-    }
     
     // add some event handlers to the square
     // https://svgjs.dev/docs/3.0/events/#event-listeners
