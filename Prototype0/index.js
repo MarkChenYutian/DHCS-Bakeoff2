@@ -26,27 +26,12 @@
  next_btn.parentNode.removeChild(next_btn);
  reset_btn.parentNode.removeChild(reset_btn);
  button_container = document.createElement("div");
- 
- // ---- Create Reset Button ----
- const reset_btn = document.createElement("button");
- reset_btn.innerText = 'Reset';
- reset_btn.style = 'background-color: #f44336; color: white; border: none; cursor: pointer; padding: 1rem;';
- 
- // ---- Create Next Task Button ----
- const next_btn = document.createElement("button");
- next_btn.innerText = 'Next Task';
- next_btn.style = 'background-color: #4CAF50; color: white; border: none; cursor: pointer; padding: 1rem;';
- 
- // ---- Button container ----
- const button_container = document.createElement("div");
- button_container.style = 'display: flex; justify-content: space-around; width: 100%; margin-top: 1rem;';
  button_container.appendChild(next_btn);
  button_container.appendChild(reset_btn);
  button_container.style = 'display: flex; justify-content: space-around; width: 100%;';
  next_btn.style = 'background-color: #4CAF50; color: white; border: none; cursor: pointer;';
  reset_btn.style = 'background-color: #f44336; color: white; border: none; cursor: pointer;';
  control_panel.appendChild(button_container);
- 
  //
  
  // =================== SLIDERS SETUP ===================
@@ -176,7 +161,7 @@
              rotation: rotateSlider.value
          });
      }
- 
+     
      // add some event handlers to the square
      // https://svgjs.dev/docs/3.0/events/#event-listeners
      let squareClickHandler = function() {
