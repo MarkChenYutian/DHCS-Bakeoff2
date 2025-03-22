@@ -62,6 +62,10 @@ scaleSlider.max = "400"; // 400%
 scaleSlider.value = "100";
 scaleSlider.style.width = "100%";
 
+let dragging = false;
+let lastX = 0;
+let lastY = 0;
+
 // ---- Append sliders to control panel ----
 control_panel.appendChild(rotateLabel);
 control_panel.appendChild(rotateSlider);
@@ -120,16 +124,33 @@ let squareBeingClicked = false;
 let manipulator = svg.group();
 let goal = svg.group();
 
-// Track offset manually
-let offsetX = 0;
-let offsetY = 0;
 
-//Anytime Mouse moves over svg area
-svg.on("mousemove", (e)=>{
-    if (squareBeingClicked) {
-        offsetX = e.offsetX;
-        offsetY = e.offsetY;
-        manipulator.translate(offsetX, offsetY);
+let dragging = false;
+let lastX = 0;
+let lastY = 0;
+
+// On mouse down, start dragging
+svg.on("mousedown", (e) => {
+    if (squareBeingClicked) { // only drag if square is active
+        dragging = true;
+        lastX = e.offsetX;
+        lastY = e.offsetY;
+    }
+});
+
+// Stop dragging when mouse up
+svg.on("mouseup", () => {
+    dragging = false;
+});
+
+// Handle mouse movement while dragging
+svg.on("mousemove", (e) => {
+    if (dragging) {
+        let dx = e.offsetX - lastX;
+        let dy = e.offsetY - lastY;
+        manipulator.dmove(dx, dy); // move relative to last position
+        lastX = e.offsetX;
+        lastY = e.offsetY;
     }
 });
 
