@@ -120,12 +120,18 @@ let squareBeingClicked = false;
 let manipulator = svg.group();
 let goal = svg.group();
 
-// Any time the mouse moves over the svg area...
+// Track offset manually
+let offsetX = 0;
+let offsetY = 0;
+
+//Anytime Mouse moves over svg area
 svg.on("mousemove", (e)=>{
     if (squareBeingClicked) {
-        manipulator.center(e.offsetX, e.offsetY);
+        offsetX = e.offsetX;
+        offsetY = e.offsetY;
+        manipulator.translate(offsetX, offsetY);
     }
-})
+});
 
 // When a new task is assigned, run this...
 judge.on("newTask", () => {
