@@ -34,6 +34,41 @@ reset_btn.style = 'background-color: #f44336; color: white; border: none; cursor
 control_panel.appendChild(button_container);
 //
 
+// =================== SLIDERS SETUP ===================
+
+// ---- Rotation Slider ----
+let rotateLabel = document.createElement("label");
+rotateLabel.innerText = "Rotation:";
+rotateLabel.style.marginTop = "1rem";
+rotateLabel.style.display = "block";
+
+let rotateSlider = document.createElement("input");
+rotateSlider.type = "range";
+rotateSlider.min = "0";
+rotateSlider.max = "360";
+rotateSlider.value = "0";
+rotateSlider.style.width = "100%";
+
+// ---- Scale Slider ----
+let scaleLabel = document.createElement("label");
+scaleLabel.innerText = "Scale:";
+scaleLabel.style.marginTop = "1rem";
+scaleLabel.style.display = "block";
+
+let scaleSlider = document.createElement("input");
+scaleSlider.type = "range";
+scaleSlider.min = "50";  // 50%
+scaleSlider.max = "200"; // 200%
+scaleSlider.value = "100";
+scaleSlider.style.width = "100%";
+
+// ---- Append sliders to control panel ----
+control_panel.appendChild(rotateLabel);
+control_panel.appendChild(rotateSlider);
+control_panel.appendChild(scaleLabel);
+control_panel.appendChild(scaleSlider);
+
+
 
 // Events you can assign handlers to:
 // 		score: when a task is scored
@@ -106,6 +141,27 @@ judge.on("newTask", () => {
     manipulator.add(task.start.square);
     goal.add(task.goal.square);
 
+     // Reset transforms and sliders when new task starts
+    task.start.square.transform({rotation: 0, scale: 1});
+    rotateSlider.value = "0";
+    scaleSlider.value = "100";
+
+    // ---- Rotation Slider Handler ----
+    rotateSlider.oninput = function() {
+        task.start.square.transform({
+            rotation: this.value,
+            scale: scaleSlider.value / 100
+        });
+    }
+
+    // ---- Scale Slider Handler ----
+    scaleSlider.oninput = function() {
+        task.start.square.transform({
+            scale: this.value / 100,
+            rotation: rotateSlider.value
+        });
+    }
+    
     // add some event handlers to the square
     // https://svgjs.dev/docs/3.0/events/#event-listeners
     let squareClickHandler = function() {
