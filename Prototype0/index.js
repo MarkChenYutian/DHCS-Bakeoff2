@@ -13,7 +13,19 @@
  // =========== /end required =========== 
  
  // The original footer button are too ugly, hacked to fix that.
+ const footer = document.querySelector("footer")
+ footer.parentNode.removeChild(footer);
  const control_panel = document.getElementById("control-panel");
+ control_panel.appendChild(footer);
+ 
+ const reset_btn = footer.children[0];
+ const next_btn = footer.children[1];
+ console.log(next_btn.innerHTML)
+ next_btn.innerHTML = 'Next Task';
+ reset_btn.innerHTML = 'Reset';
+ next_btn.parentNode.removeChild(next_btn);
+ reset_btn.parentNode.removeChild(reset_btn);
+ button_container = document.createElement("div");
  
  // ---- Create Reset Button ----
  const reset_btn = document.createElement("button");
@@ -30,6 +42,9 @@
  button_container.style = 'display: flex; justify-content: space-around; width: 100%; margin-top: 1rem;';
  button_container.appendChild(next_btn);
  button_container.appendChild(reset_btn);
+ button_container.style = 'display: flex; justify-content: space-around; width: 100%;';
+ next_btn.style = 'background-color: #4CAF50; color: white; border: none; cursor: pointer;';
+ reset_btn.style = 'background-color: #f44336; color: white; border: none; cursor: pointer;';
  control_panel.appendChild(button_container);
  
  //
@@ -57,8 +72,8 @@
  
  let scaleSlider = document.createElement("input");
  scaleSlider.type = "range";
- scaleSlider.min = "10";  // 10%
- scaleSlider.max = "400"; // 400%
+ scaleSlider.min = "50";  // 50%
+ scaleSlider.max = "200"; // 200%
  scaleSlider.value = "100";
  scaleSlider.style.width = "100%";
  
@@ -121,20 +136,11 @@
  let goal = svg.group();
  
  // Any time the mouse moves over the svg area...
- // Track offset manually
- let offsetX = 0;
- let offsetY = 0;
- 
- //Anytime Mouse moves over svg area
  svg.on("mousemove", (e)=>{
      if (squareBeingClicked) {
          manipulator.center(e.offsetX, e.offsetY);
-         offsetX = e.offsetX;
-         offsetY = e.offsetY;
-         manipulator.translate(offsetX, offsetY);
      }
  })
- });
  
  // When a new task is assigned, run this...
  judge.on("newTask", () => {
@@ -150,35 +156,26 @@
      manipulator.add(task.start.square);
      goal.add(task.goal.square);
  
-     // Reset manipulator transform and sliders when new task starts
-     manipulator.transform({rotation: 0, scale: 1});
+      // Reset transforms and sliders when new task starts
+     task.start.square.transform({rotation: 0, scale: 1});
      rotateSlider.value = "0";
      scaleSlider.value = "100";
  
      // ---- Rotation Slider Handler ----
      rotateSlider.oninput = function() {
-         // Get current translation to keep square in same position
-         let currentTransform = manipulator.transform();
-         manipulator.transform({
+         task.start.square.transform({
              rotation: this.value,
-             scale: scaleSlider.value / 100,
-             translateX: currentTransform.translateX,
-             translateY: currentTransform.translateY
+             scale: scaleSlider.value / 100
          });
      }
  
      // ---- Scale Slider Handler ----
      scaleSlider.oninput = function() {
-         // Get current translation to keep square in same position
-         let currentTransform = manipulator.transform();
-         manipulator.transform({
+         task.start.square.transform({
              scale: this.value / 100,
-             rotation: rotateSlider.value,
-             translateX: currentTransform.translateX,
-             translateY: currentTransform.translateY
+             rotation: rotateSlider.value
          });
      }
- 
  
      // add some event handlers to the square
      // https://svgjs.dev/docs/3.0/events/#event-listeners
