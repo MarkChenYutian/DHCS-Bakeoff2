@@ -159,7 +159,8 @@
          // Apply transform to the group!
          manipulator.transform({
              rotation: rotation,
-             scale: scale
+             scale: scale,
+             origin: 'center center'
          });
      }
      
@@ -170,7 +171,8 @@
      
          manipulator.transform({
              scale: scale,
-             rotation: rotation
+             rotation: rotation,
+             origin: 'center center'
          });
      }
 
