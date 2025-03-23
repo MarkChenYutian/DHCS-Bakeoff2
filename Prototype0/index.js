@@ -57,8 +57,8 @@
  
  let scaleSlider = document.createElement("input");
  scaleSlider.type = "range";
- scaleSlider.min = "50";  // 50%
- scaleSlider.max = "200"; // 200%
+ scaleSlider.min = "10";  // 10%
+ scaleSlider.max = "400"; // 400%
  scaleSlider.value = "100";
  scaleSlider.style.width = "100%";
  
@@ -67,7 +67,12 @@
  control_panel.appendChild(rotateSlider);
  control_panel.appendChild(scaleLabel);
  control_panel.appendChild(scaleSlider);
- 
+
+//DEBUGGGG
+ rotateSlider.oninput = function() {
+     console.log("Rotation value: ", this.value);  // Check if slider works
+ }
+  
  
  
  // Events you can assign handlers to:
@@ -103,7 +108,8 @@
  // 
  // judge.getTaskNumber() will return the number (integer) of the current task
  // judge.setup() starts everything in motion.
- 
+
+
  
  //  =========== !!! FOR EXAMPLE !!! =========== 
  
