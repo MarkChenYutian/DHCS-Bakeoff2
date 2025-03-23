@@ -146,16 +146,14 @@
      rotateSlider.value = "0";
      scaleSlider.value = "100";
  
- 
 
      // ---- Rotation Slider Handler ----
      rotateSlider.oninput = function() {
          const rotation = parseFloat(this.value);
          const scale = parseFloat(scaleSlider.value) / 100;
-         
-         // Rotate around the square's center:
-         task.start.square.center(task.start.square.cx(), task.start.square.cy());
-         task.start.square.transform({
+     
+         // Apply transform to the group!
+         manipulator.transform({
              rotation: rotation,
              scale: scale
          });
@@ -166,9 +164,7 @@
          const scale = parseFloat(this.value) / 100;
          const rotation = parseFloat(rotateSlider.value);
      
-         // Keep rotation around center
-         task.start.square.center(task.start.square.cx(), task.start.square.cy());
-         task.start.square.transform({
+         manipulator.transform({
              scale: scale,
              rotation: rotation
          });
