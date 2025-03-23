@@ -146,21 +146,34 @@
      rotateSlider.value = "0";
      scaleSlider.value = "100";
  
+ 
+
      // ---- Rotation Slider Handler ----
      rotateSlider.oninput = function() {
+         const rotation = parseFloat(this.value);
+         const scale = parseFloat(scaleSlider.value) / 100;
+         
+         // Rotate around the square's center:
+         task.start.square.center(task.start.square.cx(), task.start.square.cy());
          task.start.square.transform({
-             rotation: this.value,
-             scale: scaleSlider.value / 100
+             rotation: rotation,
+             scale: scale
          });
      }
- 
+     
      // ---- Scale Slider Handler ----
      scaleSlider.oninput = function() {
+         const scale = parseFloat(this.value) / 100;
+         const rotation = parseFloat(rotateSlider.value);
+     
+         // Keep rotation around center
+         task.start.square.center(task.start.square.cx(), task.start.square.cy());
          task.start.square.transform({
-             scale: this.value / 100,
-             rotation: rotateSlider.value
+             scale: scale,
+             rotation: rotation
          });
      }
+
      
      // add some event handlers to the square
      // https://svgjs.dev/docs/3.0/events/#event-listeners
