@@ -48,6 +48,11 @@
  rotateSlider.max = "360";
  rotateSlider.value = "0";
  rotateSlider.style.width = "100%";
+
+//DEBUGGGG
+ rotateSlider.oninput = function() {
+     console.log("Rotation value: ", this.value);  // Check if slider works
+ }
  
  // ---- Scale Slider ----
  let scaleLabel = document.createElement("label");
@@ -57,7 +62,7 @@
  
  let scaleSlider = document.createElement("input");
  scaleSlider.type = "range";
- scaleSlider.min = "10";  // 10%
+ scaleSlider.min = "5";  // 5%
  scaleSlider.max = "400"; // 400%
  scaleSlider.value = "100";
  scaleSlider.style.width = "100%";
@@ -67,11 +72,6 @@
  control_panel.appendChild(rotateSlider);
  control_panel.appendChild(scaleLabel);
  control_panel.appendChild(scaleSlider);
-
-//DEBUGGGG
- rotateSlider.oninput = function() {
-     console.log("Rotation value: ", this.value);  // Check if slider works
- }
   
  
  
