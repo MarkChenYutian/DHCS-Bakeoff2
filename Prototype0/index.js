@@ -126,7 +126,7 @@
  // Any time the mouse moves over the svg area...
  svg.on("mousemove", (e)=>{
      if (squareBeingClicked) {
-         manipulator.center(e.offsetX, e.offsetY);
+         manipulator.dmove(e.offsetX, e.offsetY);
      }
  })
  
