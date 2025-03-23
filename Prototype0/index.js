@@ -49,10 +49,7 @@
  rotateSlider.value = "0";
  rotateSlider.style.width = "100%";
 
-//DEBUGGGG
- rotateSlider.oninput = function() {
-     console.log("Rotation value: ", this.value);  // Check if slider works
- }
+
  
  // ---- Scale Slider ----
  let scaleLabel = document.createElement("label");
@@ -135,6 +132,7 @@
  
  // When a new task is assigned, run this...
  judge.on("newTask", () => {
+     manipulator.clear();  // Clear any old squares from previous tasks
      // get the next task
      let task = judge.getCurrentTask();
  
@@ -148,7 +146,7 @@
      goal.add(task.goal.square);
  
       // Reset transforms and sliders when new task starts
-     task.start.square.transform({rotation: 0, scale: 1});
+     manipulator.transform({rotation: 0, scale: 1});
      rotateSlider.value = "0";
      scaleSlider.value = "100";
  
