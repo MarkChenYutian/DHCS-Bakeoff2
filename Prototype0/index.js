@@ -57,8 +57,9 @@
  
  let scaleSlider = document.createElement("input");
  scaleSlider.type = "range";
- scaleSlider.min = "0.5";  
- scaleSlider.max = "20000"; 
+ scaleSlider.min = "50";  
+ scaleSlider.max = "200"; 
+ scaleSlider.step = "1";
  scaleSlider.value = "100";
  scaleSlider.style.width = "100%";
  
@@ -161,6 +162,7 @@
              rotation: rotateSlider.value
          });
      }
+
      
      // add some event handlers to the square
      // https://svgjs.dev/docs/3.0/events/#event-listeners
