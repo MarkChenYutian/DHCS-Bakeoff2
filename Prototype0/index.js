@@ -151,30 +151,13 @@
      scaleSlider.value = "100";
  
 
-     // ---- Rotation Slider Handler ----
-     rotateSlider.oninput = function() {
-         const rotation = parseFloat(this.value);
-         const scale = parseFloat(scaleSlider.value) / 100;
-     
-         // Apply transform to the group!
-         manipulator.transform({
-             rotation: rotation,
-             scale: scale,
-             origin: 'center center'
-         });
-     }
-     
-     // ---- Scale Slider Handler ----
-     scaleSlider.oninput = function() {
-         const scale = parseFloat(this.value) / 100;
-         const rotation = parseFloat(rotateSlider.value);
-     
-         manipulator.transform({
-             scale: scale,
-             rotation: rotation,
-             origin: 'center center'
-         });
-     }
+     rotateSlider.oninput = function () {
+      applyTransform(task);  // Call the function
+  }
+  
+  scaleSlider.oninput = function () {
+      applyTransform(task);  // Call the function
+  }
 
      
      // add some event handlers to the square
@@ -191,6 +174,21 @@
      }
      task.start.square.on("click", squareClickHandler);
  });
- 
+
+      function applyTransform(task) {
+          const rotation = parseFloat(rotateSlider.value);
+          const scale = parseFloat(scaleSlider.value) / 100;
+      
+          // Get the center position of the blue square:
+          const centerX = task.start.position.x;
+          const centerY = task.start.position.y;
+      
+          // Apply scale first
+          manipulator.scale(scale);
+      
+          // Then rotate around center
+          manipulator.rotate(rotation, centerX, centerY);
+      }
+       
  // once you've got your handlers set up, start it up:
  judge.setup();
