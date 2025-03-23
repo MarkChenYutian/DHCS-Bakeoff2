@@ -145,18 +145,19 @@
      task.start.square.transform({rotation: 0, scale: 1});
      rotateSlider.value = "0";
      scaleSlider.value = "100";
- 
-     // ---- Rotation Slider Handler ----
+
+  
+      // ---- Rotation Slider Handler ----
      rotateSlider.oninput = function() {
-         task.start.square.transform({
+         manipulator.transform({
              rotation: this.value,
              scale: scaleSlider.value / 100
          });
      }
- 
+     
      // ---- Scale Slider Handler ----
      scaleSlider.oninput = function() {
-         task.start.square.transform({
+         manipulator.transform({
              scale: this.value / 100,
              rotation: rotateSlider.value
          });
