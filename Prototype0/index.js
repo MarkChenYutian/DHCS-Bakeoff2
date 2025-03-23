@@ -146,21 +146,21 @@
      rotateSlider.value = "0";
      scaleSlider.value = "100";
 
-	 // ---- Rotation Slider Handler ----
-rotateSlider.oninput = function() {
-    manipulator.transform({
-        rotation: this.value,
-        scale: scaleSlider.value / 100
-    });
-}
-
-// ---- Scale Slider Handler ----
-scaleSlider.oninput = function() {
-    manipulator.transform({
-        scale: this.value / 100,
-        rotation: rotateSlider.value
-    });
-}
+      // ---- Rotation Slider Handler ----
+      rotateSlider.oninput = function() {
+          manipulator.transform({
+              rotation: this.value,
+              scale: scaleSlider.value / 100
+          });
+      }
+      
+      // ---- Scale Slider Handler ----
+      scaleSlider.oninput = function() {
+          manipulator.transform({
+              scale: this.value / 100,
+              rotation: rotateSlider.value
+          });
+      }
      // https://svgjs.dev/docs/3.0/events/#event-listeners
      let squareClickHandler = function() {
          squareBeingClicked = squareBeingClicked ? false : true;
