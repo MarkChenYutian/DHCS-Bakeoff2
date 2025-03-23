@@ -57,8 +57,8 @@
  
  let scaleSlider = document.createElement("input");
  scaleSlider.type = "range";
- scaleSlider.min = "2";  // 2%
- scaleSlider.max = "500"; // 500%
+ scaleSlider.min = "0.5";  
+ scaleSlider.max = "700"; 
  scaleSlider.value = "100";
  scaleSlider.style.width = "100%";
  
