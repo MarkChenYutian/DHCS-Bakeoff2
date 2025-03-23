@@ -155,10 +155,10 @@
          const rotation = parseFloat(this.value);
          const scale = parseFloat(scaleSlider.value) / 100;
      
-         // Apply to manipulator group (not just the square)
-         manipulator.transform({
-             rotation: rotation,
-             scale: scale
+     // Apply to manipulator group (not just the square)
+     manipulator.transform({
+         rotation: rotation,
+         scale: scale
          });
      }
      
