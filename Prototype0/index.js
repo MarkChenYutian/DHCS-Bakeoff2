@@ -103,7 +103,7 @@ judge.on("newTask", () => {
 
     // Reset transform state
     currentRotation = 0;
-    currentScale = task.start.size / 100;
+    currentScale = 1;
     isDragging = false;
 
     manipulator.center(task.start.position.x, task.start.position.y);
@@ -111,7 +111,7 @@ judge.on("newTask", () => {
 
     // Reset sliders
     rotateSlider.value = "0";
-    scaleSlider.value = currentScale * 100;
+    scaleSlider.value = "100";
 
     // Slider handlers
     rotateSlider.oninput = function () {
