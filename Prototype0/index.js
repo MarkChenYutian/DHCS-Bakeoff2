@@ -34,41 +34,6 @@
  control_panel.appendChild(button_container);
  //
  
- // =================== SLIDERS SETUP ===================
- 
- // ---- Rotation Slider ----
- let rotateLabel = document.createElement("label");
- rotateLabel.innerText = "Rotation:";
- rotateLabel.style.marginTop = "1rem";
- rotateLabel.style.display = "block";
- 
- let rotateSlider = document.createElement("input");
- rotateSlider.type = "range";
- rotateSlider.min = "0";
- rotateSlider.max = "360";
- rotateSlider.value = "0";
- rotateSlider.style.width = "100%";
- 
- // ---- Scale Slider ----
- let scaleLabel = document.createElement("label");
- scaleLabel.innerText = "Scale:";
- scaleLabel.style.marginTop = "1rem";
- scaleLabel.style.display = "block";
- 
- let scaleSlider = document.createElement("input");
- scaleSlider.type = "range";
- scaleSlider.min = "50";  // 50%
- scaleSlider.max = "200"; // 200%
- scaleSlider.value = "100";
- scaleSlider.style.width = "100%";
- 
- // ---- Append sliders to control panel ----
- control_panel.appendChild(rotateLabel);
- control_panel.appendChild(rotateSlider);
- control_panel.appendChild(scaleLabel);
- control_panel.appendChild(scaleSlider);
- 
- 
  
  // Events you can assign handlers to:
  // 		score: when a task is scored
@@ -106,8 +71,7 @@
  
  
  //  =========== !!! FOR EXAMPLE !!! =========== 
- 
- // Here are some consts just for this example code:
+// Here are some consts just for this example code:
  const startColor = "#6677ee";
  const active_borderColor = "#F00";
  const inactive_borderColor = "#777";
@@ -118,16 +82,13 @@
  
  // These "SVG groups" will hold the squares. I could put other things in these groups, and then everything would move together.
  let manipulator = svg.group();
- let goal = svg.group();
- 
- // Any time the mouse moves over the svg area...
+ let goal = svg.group();// Any time the mouse moves over the svg area...
  svg.on("mousemove", (e)=>{
      if (squareBeingClicked) {
          manipulator.center(e.offsetX, e.offsetY);
      }
- })
- 
- // When a new task is assigned, run this...
+  })
+// When a new task is assigned, run this...
  judge.on("newTask", () => {
      // get the next task
      let task = judge.getCurrentTask();
@@ -140,29 +101,8 @@
      // add the new squares to the groups
      manipulator.add(task.start.square);
      goal.add(task.goal.square);
- 
-      // Reset transforms and sliders when new task starts
-     task.start.square.transform({rotation: 0, scale: 1});
-     rotateSlider.value = "0";
-     scaleSlider.value = "100";
- 
-     // ---- Rotation Slider Handler ----
-     rotateSlider.oninput = function() {
-         task.start.square.transform({
-             rotation: this.value,
-             scale: scaleSlider.value / 100
-         });
-     }
- 
-     // ---- Scale Slider Handler ----
-     scaleSlider.oninput = function() {
-         task.start.square.transform({
-             scale: this.value / 100,
-             rotation: rotateSlider.value
-         });
-     }
-     
-     // add some event handlers to the square
+
+           // add some event handlers to the square
      // https://svgjs.dev/docs/3.0/events/#event-listeners
      let squareClickHandler = function() {
          squareBeingClicked = squareBeingClicked ? false : true;
@@ -177,5 +117,6 @@
      task.start.square.on("click", squareClickHandler);
  });
  
- // once you've got your handlers set up, start it up:
+ // Start
+
  judge.setup();
