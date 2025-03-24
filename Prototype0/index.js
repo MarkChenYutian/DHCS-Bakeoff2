@@ -18,8 +18,6 @@ const footer = document.querySelector("footer")
 footer.parentNode.removeChild(footer);
 const control_panel = document.getElementById("control-panel");
 control_panel.appendChild(footer);
-const remain_task_progress = document.getElementById("remain-task-cnt-prog");
-const remain_task_text     = document.getElementById("remain-task-cnt-text");
 
 const reset_btn = footer.children[0];
 const next_btn = footer.children[1];
@@ -103,75 +101,20 @@ function getSquareCorners(rect) {
 
 function setupManipulator(manipulator, manipulate_square) {
     manipulator.add(manipulate_square);
-
-    // Calculate the position to place the manipulators
-    const square_corners = getSquareCorners(manipulate_square);
-    const midpoints = [
-        { x: (square_corners[0].x + square_corners[1].x) / 2, y: (square_corners[0].y + square_corners[1].y) / 2 },
-        { x: (square_corners[1].x + square_corners[2].x) / 2, y: (square_corners[1].y + square_corners[2].y) / 2 },
-        { x: (square_corners[2].x + square_corners[3].x) / 2, y: (square_corners[2].y + square_corners[3].y) / 2 },
-        { x: (square_corners[3].x + square_corners[0].x) / 2, y: (square_corners[3].y + square_corners[0].y) / 2 }
-    ];
-
-    const center_x = midpoints.reduce((acc, pt) => acc + pt.x, 0) / 4;
-    const center_y = midpoints.reduce((acc, pt) => acc + pt.y, 0) / 4;
-
-    const scaled_midpoints = midpoints.map(pt => {
-        const direction_vector = {x: (pt.x - center_x), y: (pt.y - center_y) };
-        const norm = Math.sqrt(direction_vector.x ** 2 + direction_vector.y ** 2);
-
-        return {
-            x: pt.x + (10 / norm) * direction_vector.x,
-            y: pt.y + (10 / norm) * direction_vector.y
-        };
-    });
-
-    // Add the scaling manipulator UI to the manipulator group.
-    const polygons = scaled_midpoints.map(corner => {
-        const direction_vector = { x: corner.x - center_x, y: corner.y - center_y };
-        const norm = Math.sqrt(direction_vector.x ** 2 + direction_vector.y ** 2);
-        const unit_vector = { x: direction_vector.x / norm, y: direction_vector.y / norm };
-
-        const base1 = {
-            x: corner.x - 10 * unit_vector.y,
-            y: corner.y + 10 * unit_vector.x
-        };
-        const base2 = {
-            x: corner.x + 10 * unit_vector.y,
-            y: corner.y - 10 * unit_vector.x
-        };
-        const tip = {
-            x: corner.x + 10 * unit_vector.x,
-            y: corner.y + 10 * unit_vector.y
-        };
-
-        return manipulator.polygon([
-            [base1.x, base1.y],
-            [base2.x, base2.y],
-            [tip.x, tip.y]
-        ]).fill(inactive_borderColor);
-    });
-
-    return [ manipulator, polygons ];
+    return [manipulator, null]; // No scaling controllers
 }
 
-function updateControllerIndicator(interaction_type, move_controller, scale_controller) {
+
+function updateControllerIndicator(interaction_type, move_controller) {
     controller_handle.innerHTML = interaction_type;
     if (interaction_type === 'move') {
         move_controller.fill(active_borderColor);
-        scale_controller.forEach(ctrl => ctrl.fill(inactive_borderColor));
         main_container.style.cursor = "move";
-    } else if (interaction_type === 'scale') {
-        move_controller.fill(inactive_borderColor);
-        scale_controller.forEach(ctrl => ctrl.fill(active_borderColor));
-        main_container.style.cursor = "nesw-resize";
     } else {
         move_controller.fill(inactive_borderColor);
-        scale_controller.forEach(ctrl => ctrl.fill(inactive_borderColor));
         main_container.style.cursor = "default";
     }
 }
-
 
 // Here are some consts just for this example code:
 const startColor = "#777";
@@ -207,13 +150,6 @@ judge.on("newTask", () => {
     // get the next task
     const task = judge.getCurrentTask();
 
-    // update progress
-    const task_number = judge.getTaskNumber();
-    remain_task_progress.max = tasksLength;
-    remain_task_progress.value = task_number;
-    remain_task_progress.innerHTML = tasksLength - task_number;
-    remain_task_text.innerHTML = `${task_number}/${tasksLength}`;
-
     // style the start and goal squares
     task.start.square.fill(startColor);
     task.goal.square.fill('none');
@@ -228,15 +164,26 @@ judge.on("newTask", () => {
     task.start.square.on("click", () => {
         interaction_type = (interaction_type === 'move') ? 'none' : 'move';
         updateControllerIndicator(interaction_type, task.start.square, scaling_controller);
-    });
 
-    // Add event handler to handle the scaling controller
-    scaling_controller.forEach((controller, idx) => {
-        controller.on("click", () => {
-            interaction_type = (interaction_type === 'scale') ? 'none' : 'scale';
-            updateControllerIndicator(interaction_type, task.start.square, scaling_controller);
-        });
     });
+    
+    const resizeSlider = document.getElementById("resize-slider");
+    const rotateSlider = document.getElementById("rotate-slider");
+
+    // Reset slider values
+    resizeSlider.value = 1;
+    rotateSlider.value = 0;
+    
+    resizeSlider.oninput = () => {
+        const scale = parseFloat(resizeSlider.value);
+        task.start.square.scale(scale);
+    };
+    
+    rotateSlider.oninput = () => {
+        const angle = parseFloat(rotateSlider.value);
+        task.start.square.rotate(angle);
+    };
+
 
 });
 
