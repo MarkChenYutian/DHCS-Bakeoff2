@@ -7,7 +7,82 @@
 			html {
 				font-family: Arial, sans-serif;
 			}
-			body {
+			body {<!DOCTYPE html>
+  <html lang="en">
+  	<head>
+  		<meta charset="utf-8">
+  		<title>Bakeoff 2</title>
+  		<style type="text/css">
+  			html {
+  				font-family: Arial, sans-serif;
+  			}
+  			body {
+  				padding-top: 4rem;
+  				height: calc(100vh - 4rem);
+  				border: none;
+  				margin: auto;
+  				text-align: center;
+  				display: flex;
+  			    align-items: center;
+  			    justify-content: center;
+  				max-width: 1080px;
+  				align-items: start;
+  			}
+ 
+  			.panel * button {
+  				display: block;
+  				padding: 1rem;
+  				background: white;
+  				border: 1px #ddd solid;
+  				margin: 1rem;
+  				color: inherit;
+  				font: inherit;
+  				cursor: pointer;	
+  			}
+  			.panel * button:hover {
+  				background-color: #ddd;
+  			}
+  			svg {
+  				border: 1px #ddd solid;
+  			}
+  			.panel {
+  				border: 1px #ddd solid;
+  				padding: 1rem;
+  				text-align: left;
+  				position: relative;
+  			}
+  			.panel > .panel-title {
+  				font-size: 1.2rem;
+  				font-weight: semibold;
+  				position: absolute;
+  				top: -.8rem;
+  				padding: .2rem;
+  				background-color: white;
+  				color: #777;
+  			}
+  		</style>
+  		<!-- Two required scripts -->
+  		<script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+  		<script src="https://dhcs-s25-bakeoff2.glitch.me/framework.js"></script>
+  		<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  	</head>
+  	<body>
+  		<div id="main"></div>
+  		<div style="flex-grow: 1; min-width: 2rem;"></div>
+  		<div style="display: flex; gap: 2rem; flex-direction: column;">
+  			<div class="panel">
+  
+  				<span class="panel-title">Status Pannel</span>
+  				<p style="width: 10rem;">Control State: <span id="control-state"> Inactive </span></p>
+  			</div>
+  
+  			<div class="panel" id="control-panel">
+  				<span class="panel-title">Control</span>
+  			</div>
+  		</div>
+  	</body>
+  	<script src="index.js"></script>
+  </html>
 				padding-top: 4rem;
 				height: calc(100vh - 4rem);
 				border: none;
