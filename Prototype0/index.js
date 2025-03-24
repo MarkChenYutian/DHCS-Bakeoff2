@@ -173,18 +173,21 @@ judge.on("newTask", () => {
         applyTransform();
     };
 
-    // Handler Dragging
-    task.start.square.on("click", () => {
-        isDragging = !isDragging;
-        if (isDragging) {
-            task.start.square.stroke({ color: active_borderColor, width: 2 });
-            controller_handle.innerHTML = "Active";
-        } else {
-            task.start.square.stroke({ color: inactive_borderColor, width: 2 });
-            controller_handle.innerHTML = "Inactive";
-        }
-    });
-});
-
-// once you've got your handlers set up, start it up:
-judge.setup();
+   // add some event handlers to the square
+     // https://svgjs.dev/docs/3.0/events/#event-listeners
+     let squareClickHandler = function() {
+         console.log("Click!");
+     }
+     task.start.square.on("click", squareClickHandler);
+ 
+     task.start.square.on("mousedown", (e)=> {
+         squareBeingClicked = true;
+     });
+ 
+     task.start.square.on("mouseup", (e)=> {
+         squareBeingClicked = false;
+     });
+ });
+ 
+ // once you've got your handlers set up, start it up:
+ judge.setup();
