@@ -7,6 +7,7 @@
  // The "size" attribute here is specified as a string.
  let svg = SVG().addTo('#main').size(""+canvasSize+"px", ""+canvasSize+"px");
  let controller_handle = document.getElementById("control-state");
+ const main_container = document.getElementById("main");
  
  // Initialize the "judge" object with the number of tasks per trial, your svg drawing area, and a team name.
  const judge = new Judge(tasksLength, svg, "teamName");
