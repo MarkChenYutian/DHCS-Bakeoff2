@@ -80,6 +80,24 @@ judge.on("newTask", () => {
     manipulator.add(task.start.square);
     goal.add(task.goal.square);
 
+     // ======== NEW: Set sliders to current start values ========
+    sizeSlider.value = task.start.size;
+    rotateSlider.value = task.start.rotation;
+
+    // event handlers for dragging
+    let squareClickHandler = function() {
+        console.log("Click!");
+    }
+    task.start.square.on("click", squareClickHandler);
+
+    task.start.square.on("mousedown", (e) => {
+        squareBeingClicked = true;
+    });
+
+    task.start.square.on("mouseup", (e) => {
+        squareBeingClicked = false;
+    });
+//comment
     // add some event handlers to the square
     // https://svgjs.dev/docs/3.0/events/#event-listeners
     let squareClickHandler = function() {
