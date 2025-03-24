@@ -61,11 +61,10 @@
 		<div id="main"></div>
 		<div style="flex-grow: 1; min-width: 2rem;"></div>
 		<div style="display: flex; gap: 2rem; flex-direction: column;">
-			<div class="panel">
-				
-				<span class="panel-title">Status Pannel</span>
-				<p style="width: 10rem;">Control State: <span id="control-state"> Inactive </span></p>
-				<p style="width: 10rem;">Progress: <span id="remain-task-cnt-text"></span><br/><progress id="remain-task-cnt-prog"></progress></p>
+			<div class="panel" id="control-panel">
+			    <span class="panel-title">Control</span>
+			    <label>Resize: <input type="range" id="resize-slider" min="0.5" max="2" step="0.01" value="1"></label>
+			    <label>Rotate: <input type="range" id="rotate-slider" min="0" max="360" step="1" value="0"></label>
 			</div>
 
 			<div class="panel" id="control-panel">
