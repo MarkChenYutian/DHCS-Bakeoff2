@@ -1,68 +1,100 @@
-// =========== Required Constants ===========
+// =========== This part is required: =========== 
+// This constant can be changed while you are experimenting, but it should be set back to 10 for the Bakeoff:
 const tasksLength = 10;
-const canvasSize = 400; // Define canvas size
 
-// Initialize SVG canvas
-let svg = SVG().addTo('#main').size(`${canvasSize}px`, `${canvasSize}px`);
-let controller_handle = document.getElementById("control-state");
+// As with Bakeoff 1, this code uses the svg.js library; documentation at: https://svgjs.dev/docs/3.0/
+// Create an svg div that is the specified size, in the div with ID "main". (Centering it on the page is handled by CSS.)
+// The "size" attribute here is specified as a string.
+let svg = SVG().addTo('#main').size(""+canvasSize+"px", ""+canvasSize+"px");
 
-// Initialize judge
+// Initialize the "judge" object with the number of tasks per trial, your svg drawing area, and a team name.
 const judge = new Judge(tasksLength, svg, "teamName");
+// =========== /end required =========== 
 
-// Footer buttons
-const reset_btn = document.getElementById("reset-btn");
-const next_btn = document.getElementById("next-btn");
+// Events you can assign handlers to:
+// 		score: when a task is scored
+// 		newTask: when a new task (the set of start and goal positions) is created
+// 		testOver: when all tasks have been fulfilled
+// 		setup: when the judge is first created, and whenever the "reset" button is pressed
+// 		clearField: when the judge removes the squares from the previous round
+// judge.on(eventName, callback) will allow you to register a callback (handler) to any of the above.
 
-// Button styles (optional, but consistent with your original code)
-reset_btn.style = 'background-color: #f44336; color: white; border: none; cursor: pointer;';
-next_btn.style = 'background-color: #4CAF50; color: white; border: none; cursor: pointer;';
+// Other functions you can call:
+// judge.getCurrentTask() will return a "task" object shaped like this:
+//		{
+//			start: {
+//				position: {
+//						x: number,
+//						y: number
+//					},
+//				rotation: number,
+//				size: number,
+//				square: SVG.Rect
+//			},
+//			goal: {
+//				position: {
+//					x: number,
+//					y: number
+//				},
+//				rotation: number,
+//				size: number,
+//				square: SVG.Rect
+//			}
+//		};
+// 
+// judge.getTaskNumber() will return the number (integer) of the current task
+// judge.setup() starts everything in motion.
 
-// Colors and interaction variables
+
+//  =========== !!! FOR EXAMPLE !!! =========== 
+
+// Here are some consts just for this example code:
 const startColor = "#6677ee";
-const active_borderColor = "#F00";
-const inactive_borderColor = "#777";
 const goalColor = "#777";
+
+// And a global variable for dragging
 let squareBeingClicked = false;
 
-// Groups to hold the squares
+// These "SVG groups" will hold the squares. I could put other things in these groups, and then everything would move together.
 let manipulator = svg.group();
 let goal = svg.group();
 
-// Dragging functionality
-svg.on("mousemove", (e) => {
+// Any time the mouse moves over the svg area...
+svg.on("mousemove", (e)=>{
     if (squareBeingClicked) {
         manipulator.center(e.offsetX, e.offsetY);
     }
-});
+})
 
-// Handle new task creation
+// When a new task is assigned, run this...
 judge.on("newTask", () => {
+    // get the next task
     let task = judge.getCurrentTask();
 
-    // Style squares
-    task.start.square.fill(startColor).stroke({ color: inactive_borderColor, width: 2 });
-    task.goal.square.fill('none').stroke(goalColor);
+    // style the start and goal squares
+    task.start.square.fill(startColor);
+    task.goal.square.fill('none');
+    task.goal.square.stroke(goalColor);
 
-    // Add to groups
+    // add the new squares to the groups
     manipulator.add(task.start.square);
     goal.add(task.goal.square);
 
-    // Click handler
-    task.start.square.on("click", () => {
-        squareBeingClicked = !squareBeingClicked;
-        if (squareBeingClicked) {
-            task.start.square.stroke({ color: active_borderColor, width: 2 });
-            controller_handle.innerHTML = "Active";
-        } else {
-            task.start.square.stroke({ color: inactive_borderColor, width: 2 });
-            controller_handle.innerHTML = "Inactive";
-        }
+    // add some event handlers to the square
+    // https://svgjs.dev/docs/3.0/events/#event-listeners
+    let squareClickHandler = function() {
+        console.log("Click!");
+    }
+    task.start.square.on("click", squareClickHandler);
+
+    task.start.square.on("mousedown", (e)=> {
+        squareBeingClicked = true;
+    });
+
+    task.start.square.on("mouseup", (e)=> {
+        squareBeingClicked = false;
     });
 });
 
-// Button event listeners
-reset_btn.addEventListener('click', () => judge.setup());
-next_btn.addEventListener('click', () => judge.nextTask());
-
-// Start
+// once you've got your handlers set up, start it up:
 judge.setup();
