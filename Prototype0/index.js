@@ -155,6 +155,16 @@
          });
      }
      
+      // ===== DYNAMIC SCALE SLIDER SETUP =====
+     let goalSize = task.goal.size;
+     let startSize = task.start.size;
+     
+     // Dynamically set min, max, value for scale slider
+     scaleSlider.min = Math.max(goalSize * 0.5, 50);  // prevent too small
+     scaleSlider.max = goalSize * 2;
+     scaleSlider.step = "1";
+     scaleSlider.value = startSize;
+
      // ---- Scale Slider Handler ----
      scaleSlider.oninput = function() {
          manipulator.transform({
@@ -162,8 +172,8 @@
              rotation: rotateSlider.value
          });
      }
-     
-     // add some event handlers to the square
+
+  
      // https://svgjs.dev/docs/3.0/events/#event-listeners
      let squareClickHandler = function() {
          squareBeingClicked = squareBeingClicked ? false : true;
