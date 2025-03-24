@@ -75,8 +75,6 @@ function applyTransform() {
     manipulator.transform({
         rotation: currentRotation,
         scale: currentScale,
-        translateX: manipulator.cx(),
-        translateY: manipulator.cy()
     });
 }
 
