@@ -65,6 +65,8 @@ const goalColor = "#777";
 let currentRotation = 0;
 let currentScale = 1;
 let isDragging = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
 
 // SVG groups for start and goal squares
 let manipulator = svg.group();
@@ -74,14 +76,25 @@ let goal = svg.group();
 function applyTransform() {
     manipulator.transform({
         rotation: currentRotation,
-        scale: currentScale,
+        scale: currentScale
     });
 }
 
-// Dragging behavior
+// Dragging behavior (relative movement)
+svg.on("mousedown", (e) => {
+    if (isDragging) {
+        lastMouseX = e.offsetX;
+        lastMouseY = e.offsetY;
+    }
+});
+
 svg.on("mousemove", (e) => {
     if (isDragging) {
-        manipulator.center(e.offsetX, e.offsetY);
+        let dx = e.offsetX - lastMouseX;
+        let dy = e.offsetY - lastMouseY;
+        manipulator.dmove(dx, dy);
+        lastMouseX = e.offsetX;
+        lastMouseY = e.offsetY;
         applyTransform();
     }
 });
@@ -117,18 +130,12 @@ judge.on("newTask", () => {
     
     scaleSlider.min = minScalePercent.toFixed(0);
     scaleSlider.max = maxScalePercent.toFixed(0);
-    
-    // Start at current scale = 100%
     scaleSlider.step = "1";
     scaleSlider.value = "100";
     currentScale = 1;
     
     scaleLabel.innerText = `Scale (%): ${minScalePercent}% - ${maxScalePercent}%`;
-
-
-    // Reset sliders
     rotateSlider.value = "0";
-    scaleSlider.value = "100";
 
     // Slider handlers
     rotateSlider.oninput = function () {
@@ -142,7 +149,7 @@ judge.on("newTask", () => {
     };
 
     // Click to toggle dragging
-    task.start.square.on("click", () => {
+    manipulator.on("click", () => {
         isDragging = !isDragging;
         if (isDragging) {
             task.start.square.stroke({ color: active_borderColor, width: 2 });
