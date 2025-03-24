@@ -1,48 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bakeoff 2</title>
-    <style type="text/css">
-        body {
-            height: 100vh;
-            width: 100vw;
-            border: none;
-            margin: 0px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        footer {
-            width: 100vw;
-            text-align: center;
-            position: absolute;
-            bottom: 0px;
-            padding: 0.75em;
-            border-top: 1px #ddd solid;
-        }
-        svg {
-            border: 1px #ddd solid;
-        }
-    </style>
-    <!-- Required scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
-    <script src="https://dhcs-s25-bakeoff2.glitch.me/framework.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body>
+	<head>
+		<meta charset="utf-8">
+		<title>Bakeoff 2</title>
+		<style type="text/css">
+			body {
+				height: 100vh;
+				width: 100vw;
+				border: none;
+				margin: 0px;
+				text-align: center;
+				display: flex;
+			    align-items: center;
+			    justify-content: center;
+			}
+			footer {
+				width: 100vw;
+				text-align: center;
+				position: absolute;
+				bottom: 0px;
+				padding: 0.75em;
+				border-top: 1px #ddd solid;
+			}
+			svg {
+				border: 1px #ddd solid;
+			}
+		</style>
+		<!-- Two required scripts -->
+		<script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+		<script src="https://dhcs-s25-bakeoff2.glitch.me/framework.js"></script>
+		<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+	</head>
+
+	<body>
     <!-- SVG Canvas -->
     <div id="main"></div>
 
-    <!-- Control Panel -->
-    <div id="control-panel" class="w-full flex flex-col items-center space-y-2 mt-4">
-        <div id="control-state" class="text-lg">Inactive</div>
-    </div>
-
-    <!-- FOOTER: Sliders + Buttons -->
+    <!-- FOOTER: Sliders for Rotation & Scale -->
     <footer class="flex flex-col space-y-4 bg-gray-100 p-4 w-full">
         <div class="flex items-center justify-center space-x-4">
             <label for="rotation" class="text-lg mr-2">Rotation:</label>
@@ -52,12 +46,10 @@
             <label for="scale" class="text-lg mr-2">Scale:</label>
             <input type="range" id="scale" min="50" max="200" value="100" class="w-72 h-3">
         </div>
-        <div class="flex justify-around space-x-4">
-            <button id="reset-btn" class="bg-red-500 text-white px-4 py-2">Reset</button>
-            <button id="next-btn" class="bg-green-500 text-white px-4 py-2">Next Task</button>
-        </div>
     </footer>
-
-    <script src="index.js"></script>
-</body>
+		
+	<body>
+		<div id="main"></div>
+	</body>
+	<script src="index.js"></script>
 </html>
