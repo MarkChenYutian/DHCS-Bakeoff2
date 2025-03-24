@@ -109,6 +109,25 @@ judge.on("newTask", () => {
     manipulator.center(task.start.position.x, task.start.position.y);
     applyTransform();
 
+    // Calculate sizes
+    let startSize = task.start.size;
+    let goalSize = task.goal.size;
+
+    // Dynamically adjust slider range based on goal and start size
+    let minScalePercent = Math.max(1, (goalSize / startSize) * 50);
+    let maxScalePercent = Math.max(300, (goalSize / startSize) * 200);
+    
+    scaleSlider.min = minScalePercent.toFixed(0);
+    scaleSlider.max = maxScalePercent.toFixed(0);
+    
+    // Start at current scale = 100%
+    scaleSlider.step = "1";
+    scaleSlider.value = "100";
+    currentScale = 1;
+    
+    scaleLabel.innerText = `Scale (%): ${minScalePercent}% - ${maxScalePercent}%`;
+
+
     // Reset sliders
     rotateSlider.value = "0";
     scaleSlider.value = "100";
