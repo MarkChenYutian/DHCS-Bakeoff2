@@ -115,18 +115,31 @@
  
  // And a global variable for dragging
  let squareBeingClicked = false;
+ let currentRotation = 0;
+ let currentScale = 1;
+ let isDragging = false;
  
  // These "SVG groups" will hold the squares. I could put other things in these groups, and then everything would move together.
  let manipulator = svg.group();
  let goal = svg.group();
  
- // Any time the mouse moves over the svg area...
- svg.on("mousemove", (e)=>{
-     if (squareBeingClicked) {
-         manipulator.center(e.offsetX, e.offsetY);
-     }
- })
- 
+
+ function applyTransform() {
+     manipulator.transform({
+         rotation: currentRotation,
+         scale: currentScale,
+         translateX: manipulator.cx(),
+         translateY: manipulator.cy()
+     });
+ }
+
+  svg.on("mousemove", (e) => {
+      if (isDragging) {
+          manipulator.center(e.offsetX, e.offsetY);
+          applyTransform(); // keeps rotation & scale
+      }
+  });
+
  // When a new task is assigned, run this...
  judge.on("newTask", () => {
      // get the next task
@@ -140,53 +153,42 @@
      // add the new squares to the groups
      manipulator.add(task.start.square);
      goal.add(task.goal.square);
+
+     currentRotation = 0;
+					currentScale = task.start.size / 100;  // task.start.size is usually like 100
+					manipulator.center(task.start.position.x, task.start.position.y);
+					applyTransform();
+					
+					rotateSlider.value = "0";
+					scaleSlider.value = currentScale * 100;
  
       // Reset transforms and sliders when new task starts
      task.start.square.transform({rotation: 0, scale: 1});
      rotateSlider.value = "0";
      scaleSlider.value = "100";
 
+  			// Slider Handles
+		   rotateSlider.oninput = function() {
+	    currentRotation = parseInt(this.value);
+	    applyTransform();
+				};
+	    scaleSlider.oninput = function() {
+	    currentScale = parseInt(this.value) / 100;
+	    applyTransform();
+				};
   
-      // ---- Rotation Slider Handler ----
-     rotateSlider.oninput = function() {
-         manipulator.transform({
-             rotation: this.value,
-             scale: scaleSlider.value / 100
-         });
-     }
-     
-      // ===== DYNAMIC SCALE SLIDER SETUP =====
-     let goalSize = task.goal.size;
-     let startSize = task.start.size;
-     
-     // Dynamically set min, max, value for scale slider
-     scaleSlider.min = Math.max(goalSize * 0.5, 50);  // prevent too small
-     scaleSlider.max = goalSize * 2;
-     scaleSlider.step = "1";
-     scaleSlider.value = startSize;
-
-     // ---- Scale Slider Handler ----
-     scaleSlider.oninput = function() {
-         manipulator.transform({
-             scale: this.value / 100,
-             rotation: rotateSlider.value
-         });
-     }
-
-  
-     // https://svgjs.dev/docs/3.0/events/#event-listeners
-     let squareClickHandler = function() {
-         squareBeingClicked = squareBeingClicked ? false : true;
-         if (squareBeingClicked) {
-             task.start.square.stroke({color: active_borderColor, width: 2});
-             controller_handle.innerHTML = "Active";
-         } else {
-             task.start.square.stroke({color: inactive_borderColor, width: 2});
-             controller_handle.innerHTML = "Inactive";
-         }
-     }
-     task.start.square.on("click", squareClickHandler);
- });
+     // Handler Dragging
+    task.start.square.on("click", () => {
+        isDragging = !isDragging;
+        if (isDragging) {
+            task.start.square.stroke({color: active_borderColor, width: 2});
+            controller_handle.innerHTML = "Active";
+        } else {
+            task.start.square.stroke({color: inactive_borderColor, width: 2});
+            controller_handle.innerHTML = "Inactive";
+        }
+    });
+});
  
  // once you've got your handlers set up, start it up:
  judge.setup();
