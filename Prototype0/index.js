@@ -108,8 +108,8 @@ judge.on("newTask", () => {
     // ---- Rotation Slider ----
     rotateSlider.oninput = function () {
         task.start.square.transform({
-            rotate: this.value,
-            scale: scaleSlider.value / 100,
+            rotate: parseFloat(this.value),   
+            scale: paseFloat(scaleSlider.value) / 100,
             origin: 'center'
         });
     };
@@ -117,8 +117,8 @@ judge.on("newTask", () => {
     // ---- Scale Slider ----
     scaleSlider.oninput = function () {
         task.start.square.transform({
-            rotate: rotateSlider.value,
-            scale: this.value / 100,
+            rotate: paseFloat(rotateSlider.value),
+            scale: paseFloat(this.value) / 100,
             origin: 'center'
         });
     };
