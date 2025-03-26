@@ -78,6 +78,7 @@ let isDragging = false;
 let currentRotation = 0;
 let currentScale = 1;
 let currentTranslate = { x: 0, y: 0 };
+let task; 
 
 
 // SVG groups
@@ -86,7 +87,7 @@ let goal = svg.group();
 
 // Calculate relative movement 
 svg.on("mousemove", (e) => {
-    if (isDragging) {
+    if (isDragging && task) {
         // Calculate relative movement (optional enhancement)
         currentTranslate.x = e.offsetX;
         currentTranslate.y = e.offsetY;
@@ -105,7 +106,7 @@ svg.on("mousemove", (e) => {
 
 // Handle new task
 judge.on("newTask", () => {
-    let task = judge.getCurrentTask();
+    task = judge.getCurrentTask();
 
     // Clear previous manipulator and goal squares
     manipulator.clear();
