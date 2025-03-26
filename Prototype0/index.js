@@ -91,16 +91,13 @@ svg.on("mousemove", (e) => {
         // Calculate relative movement (optional enhancement)
         currentTranslate.x = e.offsetX;
         currentTranslate.y = e.offsetY;
-        
+
         task.start.square.transform({
             rotate: currentRotation,
             scale: currentScale,
-            translateX: currentTranslate.x,
-            translateY: currentTranslate.y,
+            translate: [currentTranslate.x, currentTranslate.y],
             origin: 'center'
         });
-        
-        manipulator.center(e.offsetX, e.offsetY);
     }
 });
 
@@ -132,8 +129,7 @@ judge.on("newTask", () => {
         task.start.square.transform({
             rotate: currentRotation,
             scale: currentScale,
-            translateX: currentTranslate.x,
-            translateY: currentTranslate.y,
+            translate: [currentTranslate.x, currentTranslate.y],
             origin: 'center'
         });
     };
@@ -144,8 +140,7 @@ judge.on("newTask", () => {
         task.start.square.transform({
             rotate: currentRotation,
             scale: currentScale,
-            translateX: currentTranslate.x,
-            translateY: currentTranslate.y,
+            translate: [currentTranslate.x, currentTranslate.y],
             origin: 'center'
         });
     };
