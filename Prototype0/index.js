@@ -73,12 +73,32 @@ const goalColor = "#777";
 // Dragging flag
 let isDragging = false;
 
+// Tracks the current transformation state (rotation, scale, and translation)
+// so all changes (slider or drag) preserve previous values instead of resetting them
+let currentRotation = 0;
+let currentScale = 1;
+let currentTranslate = { x: 0, y: 0 };
+
+
 // SVG groups
 let manipulator = svg.group();
 let goal = svg.group();
 
+// Calculate relative movement 
 svg.on("mousemove", (e) => {
     if (isDragging) {
+        // Calculate relative movement (optional enhancement)
+        currentTranslate.x = e.offsetX;
+        currentTranslate.y = e.offsetY;
+        
+        task.start.square.transform({
+            rotate: currentRotation,
+            scale: currentScale,
+            translateX: currentTranslate.x,
+            translateY: currentTranslate.y,
+            origin: 'center'
+        });
+        
         manipulator.center(e.offsetX, e.offsetY);
     }
 });
@@ -107,18 +127,24 @@ judge.on("newTask", () => {
 
     // ---- Rotation Slider ----
     rotateSlider.oninput = function () {
+        currentRotation = parseFloat(this.value);
         task.start.square.transform({
-            rotate: parseFloat(this.value),   
-            scale: paseFloat(scaleSlider.value) / 100,
+            rotate: currentRotation,
+            scale: currentScale,
+            translateX: currentTranslate.x,
+            translateY: currentTranslate.y,
             origin: 'center'
         });
     };
 
     // ---- Scale Slider ----
     scaleSlider.oninput = function () {
+        currentScale = parseFloat(this.value) / 100;
         task.start.square.transform({
-            rotate: paseFloat(rotateSlider.value),
-            scale: paseFloat(this.value) / 100,
+            rotate: currentRotation,
+            scale: currentScale,
+            translateX: currentTranslate.x,
+            translateY: currentTranslate.y,
             origin: 'center'
         });
     };
