@@ -24,6 +24,7 @@ const remain_task_text     = document.getElementById("remain-task-cnt-text");
 const reset_btn = footer.children[0];
 const next_btn = footer.children[1];
 
+console.log(next_btn.innerHTML)
 next_btn.innerHTML = 'Next Task';
 reset_btn.innerHTML = 'Reset';
 
