@@ -78,7 +78,6 @@ let isDragging = false;
 let currentRotation = 0;
 let currentScale = 1;
 let currentTranslate = { x: 0, y: 0 };
-let task; 
 
 
 // SVG groups
@@ -87,22 +86,26 @@ let goal = svg.group();
 
 // Calculate relative movement 
 svg.on("mousemove", (e) => {
-    if (isDragging && task) {
+    if (isDragging) {
         // Calculate relative movement (optional enhancement)
         currentTranslate.x = e.offsetX;
         currentTranslate.y = e.offsetY;
-
-        task.start.square.center(currentTranslate.x, currentTranslate.y);
-        task.start.square.rotate(currentRotation, currentTranslate.x, currentTranslate.y);
-        task.start.square.scale(currentScale, currentTranslate.x, currentTranslate.y);
         
-        };
+        task.start.square.transform({
+            rotate: currentRotation,
+            scale: currentScale,
+            translateX: currentTranslate.x,
+            translateY: currentTranslate.y,
+            origin: 'center'
+        });
+        
+        manipulator.center(e.offsetX, e.offsetY);
     }
 });
 
 // Handle new task
 judge.on("newTask", () => {
-    task = judge.getCurrentTask();
+    let task = judge.getCurrentTask();
 
     // Clear previous manipulator and goal squares
     manipulator.clear();
@@ -116,7 +119,6 @@ judge.on("newTask", () => {
     // Add squares to groups
     manipulator.add(task.start.square);
     goal.add(task.goal.square);
-    task.start.square.center(task.start.cx, task.start.cy); // Set initial center
 
     // Reset transforms
     task.start.square.transform({ rotation: 0, scale: 1 });
@@ -126,15 +128,25 @@ judge.on("newTask", () => {
     // ---- Rotation Slider ----
     rotateSlider.oninput = function () {
         currentRotation = parseFloat(this.value);
-        task.start.square.rotate(currentRotation, currentTranslate.x, currentTranslate.y);
-
+        task.start.square.transform({
+            rotate: currentRotation,
+            scale: currentScale,
+            translateX: currentTranslate.x,
+            translateY: currentTranslate.y,
+            origin: 'center'
+        });
     };
 
     // ---- Scale Slider ----
     scaleSlider.oninput = function () {
         currentScale = parseFloat(this.value) / 100;
-        task.start.square.scale(currentScale, currentTranslate.x, currentTranslate.y);
-
+        task.start.square.transform({
+            rotate: currentRotation,
+            scale: currentScale,
+            translateX: currentTranslate.x,
+            translateY: currentTranslate.y,
+            origin: 'center'
+        });
     };
 
     // Optional: Click to toggle dragging on/off (visual indicator can be added here)
