@@ -67,8 +67,8 @@ control_panel.appendChild(scaleSlider);
 // =========== Main Setup ===========
 
 // Colors
-const startColor = "#6677ee";
-const goalColor = "#777";
+const startColor = "#777";
+const goalColor = "#6677ee";
 
 // Dragging flag
 let isDragging = false;
@@ -104,7 +104,8 @@ judge.on("newTask", () => {
 
     // Style start and goal squares
     task.start.square.fill(startColor);
-    task.goal.square.fill('none').stroke(goalColor);
+    task.goal.square.fill('none');
+    task.goal.sqaure.stroke(goalColor);
 
     // Add squares to groups
     manipulator.add(task.start.square);
