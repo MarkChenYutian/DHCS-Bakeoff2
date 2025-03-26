@@ -23,15 +23,18 @@ const remain_task_text     = document.getElementById("remain-task-cnt-text");
 
 const reset_btn = footer.children[0];
 const next_btn = footer.children[1];
-console.log(next_btn.innerHTML)
+
 next_btn.innerHTML = 'Next Task';
 reset_btn.innerHTML = 'Reset';
+
 next_btn.parentNode.removeChild(next_btn);
 reset_btn.parentNode.removeChild(reset_btn);
-button_container = document.createElement("div");
+
+const button_container = document.createElement("div");
 button_container.appendChild(next_btn);
 button_container.appendChild(reset_btn);
 button_container.style = 'display: flex; justify-content: space-around; width: 100%;';
+
 next_btn.style = 'background-color: #4CAF50; color: white; border: none; cursor: pointer;';
 reset_btn.style = 'background-color: #f44336; color: white; border: none; cursor: pointer;';
 control_panel.appendChild(button_container);
