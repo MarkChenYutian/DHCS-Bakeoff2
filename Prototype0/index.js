@@ -92,12 +92,11 @@ svg.on("mousemove", (e) => {
         currentTranslate.x = e.offsetX;
         currentTranslate.y = e.offsetY;
 
-        task.start.square.transform({
-            rotate: currentRotation,
-            scale: currentScale,
-            translate: [currentTranslate.x, currentTranslate.y],
-            origin: 'center'
-        });
+        task.start.square.center(currentTranslate.x, currentTranslate.y);
+        task.start.square.rotate(currentRotation, currentTranslate.x, currentTranslate.y);
+        task.start.square.scale(currentScale, currentTranslate.x, currentTranslate.y);
+        
+        };
     }
 });
 
@@ -117,6 +116,7 @@ judge.on("newTask", () => {
     // Add squares to groups
     manipulator.add(task.start.square);
     goal.add(task.goal.square);
+    task.start.square.center(task.start.cx, task.start.cy); // Set initial center
 
     // Reset transforms
     task.start.square.transform({ rotation: 0, scale: 1 });
@@ -126,23 +126,15 @@ judge.on("newTask", () => {
     // ---- Rotation Slider ----
     rotateSlider.oninput = function () {
         currentRotation = parseFloat(this.value);
-        task.start.square.transform({
-            rotate: currentRotation,
-            scale: currentScale,
-            translate: [currentTranslate.x, currentTranslate.y],
-            origin: 'center'
-        });
+        task.start.square.rotate(currentRotation, currentTranslate.x, currentTranslate.y);
+
     };
 
     // ---- Scale Slider ----
     scaleSlider.oninput = function () {
         currentScale = parseFloat(this.value) / 100;
-        task.start.square.transform({
-            rotate: currentRotation,
-            scale: currentScale,
-            translate: [currentTranslate.x, currentTranslate.y],
-            origin: 'center'
-        });
+        task.start.square.scale(currentScale, currentTranslate.x, currentTranslate.y);
+
     };
 
     // Optional: Click to toggle dragging on/off (visual indicator can be added here)
