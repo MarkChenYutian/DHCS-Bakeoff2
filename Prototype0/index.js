@@ -77,11 +77,12 @@ let isDragging = false;
 let manipulator = svg.group();
 let goal = svg.group();
 
-// Mouse events for dragging
-svg.on("mousedown", (e) => {
-    if (manipulator && manipulator.children().length > 0) {
-        isDragging = true;
-    }
+task.start.square.on("click", () => {
+    isDragging = !isDragging;
+    task.start.square.stroke({
+        color: isDragging ? "#ffaa00" : "black",
+        width: 2
+    });
 });
 
 svg.on("mousemove", (e) => {
@@ -90,9 +91,6 @@ svg.on("mousemove", (e) => {
     }
 });
 
-svg.on("mouseup", (e) => {
-    isDragging = false;
-});
 
 // Handle new task
 judge.on("newTask", () => {
@@ -137,6 +135,7 @@ judge.on("newTask", () => {
     // Optional: Click to toggle dragging on/off (visual indicator can be added here)
     task.start.square.on("click", () => {
         isDragging = !isDragging;
+
     });
 });
 
