@@ -67,8 +67,8 @@ control_panel.appendChild(scaleSlider);
 // =========== Main Setup ===========
 
 // Colors
-const startColor = "#777";
-const goalColor = "#6677ee";
+const startColor = "#6677ee";
+const goalColor = "#777";
 
 // Dragging flag
 let isDragging = false;
