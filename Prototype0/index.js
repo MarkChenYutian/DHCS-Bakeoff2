@@ -117,8 +117,8 @@ judge.on("newTask", () => {
     // ---- Scale Slider ----
     scaleSlider.oninput = function () {
         task.start.square.transform({
-            scale: this.value / 100,
             rotate: rotateSlider.value,
+            scale: this.value / 100,
             origin: 'center'
         });
     };
