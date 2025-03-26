@@ -105,7 +105,7 @@ judge.on("newTask", () => {
     // Style start and goal squares
     task.start.square.fill(startColor);
     task.goal.square.fill('none');
-    task.goal.sqaure.stroke(goalColor);
+    task.goal.square.stroke(goalColor);
 
     // Add squares to groups
     manipulator.add(task.start.square);
@@ -120,7 +120,8 @@ judge.on("newTask", () => {
     rotateSlider.oninput = function () {
         task.start.square.transform({
             rotation: this.value,
-            scale: scaleSlider.value / 100
+            scale: scaleSlider.value / 100,
+            origin: 'center'
         });
     };
 
@@ -128,7 +129,8 @@ judge.on("newTask", () => {
     scaleSlider.oninput = function () {
         task.start.square.transform({
             scale: this.value / 100,
-            rotation: rotateSlider.value
+            rotation: rotateSlider.value,
+            origin: 'center'
         });
     };
 
