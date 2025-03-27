@@ -72,6 +72,8 @@ const goalColor = "#777";
 
 // Dragging flag
 let isDragging = false;
+let dragOffset = { x: 0, y: 0 };
+
 
 // Tracks the current transformation state (rotation, scale, and translation)
 // so all changes (slider or drag) preserve previous values instead of resetting them
@@ -88,9 +90,8 @@ let goal = svg.group();
 // Calculate relative movement 
 svg.on("mousemove", (e) => {
     if (isDragging && task) {
-        // Calculate relative movement (optional enhancement)
-        currentTranslate.x = e.offsetX;
-        currentTranslate.y = e.offsetY;
+        currentTranslate.x = e.offsetX - dragOffset.x;
+        currentTranslate.y = e.offsetY - dragOffset.y;
 
         task.start.square.transform({
             rotate: currentRotation,
@@ -146,11 +147,25 @@ judge.on("newTask", () => {
     };
 
     // Optional: Click to toggle dragging on/off (visual indicator can be added here)
-    task.start.square.on("click", () => {
-        isDragging = !isDragging;
+    task.start.square.on("mousedown", (e) => {
+        isDragging = true;
+        const bbox = task.start.square.bbox();
+        dragOffset.x = e.offsetX - bbox.cx;
+        dragOffset.y = e.offsetY - bbox.cy;
+
         task.start.square.stroke({
-            color: isDragging ? "#ffaa00" : "black",
+            color: "#ffaa00",
             width: 2
+        });
+    });
+});
+
+    svg.on("mouseup", () => {
+        isDragging = false;
+        task.start.square.stroke({
+            color: "black",
+            width: 2
+    
         });
     });
 });
