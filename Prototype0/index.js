@@ -69,6 +69,7 @@ control_panel.appendChild(scaleSlider);
 // Colors
 const startColor = "#6677ee";
 const goalColor = "#777";
+const highlightColor = "#ffaa00";  // Highlight color
 
 // Dragging variables
 let isDragging = false;
@@ -131,6 +132,22 @@ judge.on("newTask", () => {
             origin: 'center'
         });
     };
+
+    // Add highlight on mouse enter
+    task.start.square.on("mouseenter", () => {
+        task.start.square.stroke({
+            color: highlightColor,
+            width: 3
+        });
+    });
+
+    // Remove highlight on mouse leave
+    task.start.square.on("mouseleave", () => {
+        task.start.square.stroke({
+            color: goalColor,
+            width: 2
+        });
+    });
 
     // Drag event handlers specific to this task's square
     task.start.square.on("mousedown", (e) => {
