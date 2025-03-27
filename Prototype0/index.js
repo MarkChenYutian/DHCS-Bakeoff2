@@ -70,28 +70,49 @@ control_panel.appendChild(scaleSlider);
 const startColor = "#6677ee";
 const goalColor = "#777";
 
-// Dragging flag
+// Dragging variables
 let isDragging = false;
+let dragStartX, dragStartY;
+let originalSquareX, originalSquareY;
 
-// Tracks the current transformation state (rotation, scale, and translation)
-// so all changes (slider or drag) preserve previous values instead of resetting them
+// Tracks the current transformation state
 let currentRotation = 0;
 let currentScale = 1;
 let currentTranslate = { x: 0, y: 0 };
 let task; 
 
-
 // SVG groups
 let manipulator = svg.group();
 let goal = svg.group();
 
-// Calculate relative movement 
+// Drag event handlers
+svg.on("mousedown", (e) => {
+    if (task && task.start.square.node.contains(e.target)) {
+        isDragging = true;
+        
+        // Get the square's current transformation matrix
+        const squareMatrix = task.start.square.transform();
+        
+        // Store the initial mouse position relative to the SVG
+        dragStartX = e.offsetX;
+        dragStartY = e.offsetY;
+        
+        // Store the original square position
+        originalSquareX = currentTranslate.x;
+        originalSquareY = currentTranslate.y;
+    }
+});
+
 svg.on("mousemove", (e) => {
     if (isDragging && task) {
-        // Calculate relative movement (optional enhancement)
-        currentTranslate.x = e.offsetX;
-        currentTranslate.y = e.offsetY;
-
+        // Calculate the difference in mouse movement
+        const deltaX = e.offsetX - dragStartX;
+        const deltaY = e.offsetY - dragStartY;
+        
+        // Update translation, preserving previous transformations
+        currentTranslate.x = originalSquareX + deltaX;
+        currentTranslate.y = originalSquareY + deltaY;
+        
         task.start.square.transform({
             rotate: currentRotation,
             scale: currentScale,
@@ -99,6 +120,14 @@ svg.on("mousemove", (e) => {
             origin: 'center'
         });
     }
+});
+
+svg.on("mouseup", () => {
+    isDragging = false;
+});
+
+svg.on("mouseleave", () => {
+    isDragging = false;
 });
 
 // Handle new task
@@ -120,6 +149,9 @@ judge.on("newTask", () => {
 
     // Reset transforms
     task.start.square.transform({ rotation: 0, scale: 1 });
+    currentRotation = 0;
+    currentScale = 1;
+    currentTranslate = { x: 0, y: 0 };
     rotateSlider.value = "0";
     scaleSlider.value = "100";
 
@@ -144,15 +176,6 @@ judge.on("newTask", () => {
             origin: 'center'
         });
     };
-
-    // Optional: Click to toggle dragging on/off (visual indicator can be added here)
-    task.start.square.on("click", () => {
-        isDragging = !isDragging;
-        task.start.square.stroke({
-            color: isDragging ? "#ffaa00" : "black",
-            width: 2
-        });
-    });
 });
 
 // Start the tasks
