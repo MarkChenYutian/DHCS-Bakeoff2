@@ -85,51 +85,6 @@ let task;
 let manipulator = svg.group();
 let goal = svg.group();
 
-// Drag event handlers
-svg.on("mousedown", (e) => {
-    if (task && task.start.square.node.contains(e.target)) {
-        isDragging = true;
-        
-        // Get the square's current transformation matrix
-        const squareMatrix = task.start.square.transform();
-        
-        // Store the initial mouse position relative to the SVG
-        dragStartX = e.offsetX;
-        dragStartY = e.offsetY;
-        
-        // Store the original square position
-        originalSquareX = currentTranslate.x;
-        originalSquareY = currentTranslate.y;
-    }
-});
-
-svg.on("mousemove", (e) => {
-    if (isDragging && task) {
-        // Calculate the difference in mouse movement
-        const deltaX = e.offsetX - dragStartX;
-        const deltaY = e.offsetY - dragStartY;
-        
-        // Update translation, preserving previous transformations
-        currentTranslate.x = originalSquareX + deltaX;
-        currentTranslate.y = originalSquareY + deltaY;
-        
-        task.start.square.transform({
-            rotate: currentRotation,
-            scale: currentScale,
-            translate: [currentTranslate.x, currentTranslate.y],
-            origin: 'center'
-        });
-    }
-});
-
-svg.on("mouseup", () => {
-    isDragging = false;
-});
-
-svg.on("mouseleave", () => {
-    isDragging = false;
-});
-
 // Handle new task
 judge.on("newTask", () => {
     task = judge.getCurrentTask();
@@ -176,6 +131,61 @@ judge.on("newTask", () => {
             origin: 'center'
         });
     };
+
+    // Drag event handlers specific to this task's square
+    task.start.square.on("mousedown", (e) => {
+        isDragging = true;
+        
+        // Get the SVG point from the mouse event
+        const svgPoint = svg.node.createSVGPoint();
+        svgPoint.x = e.clientX;
+        svgPoint.y = e.clientY;
+        const screenCTM = svg.node.getScreenCTM().inverse();
+        const svgCoords = svgPoint.matrixTransform(screenCTM);
+        
+        // Store the initial mouse position
+        dragStartX = svgCoords.x;
+        dragStartY = svgCoords.y;
+        
+        // Store the original square position
+        originalSquareX = currentTranslate.x;
+        originalSquareY = currentTranslate.y;
+    });
+});
+
+// Global mouse move and up events
+svg.on("mousemove", (e) => {
+    if (isDragging && task) {
+        // Get the SVG point from the mouse event
+        const svgPoint = svg.node.createSVGPoint();
+        svgPoint.x = e.clientX;
+        svgPoint.y = e.clientY;
+        const screenCTM = svg.node.getScreenCTM().inverse();
+        const svgCoords = svgPoint.matrixTransform(screenCTM);
+        
+        // Calculate the difference in mouse movement
+        const deltaX = svgCoords.x - dragStartX;
+        const deltaY = svgCoords.y - dragStartY;
+        
+        // Update translation, preserving previous transformations
+        currentTranslate.x = originalSquareX + deltaX;
+        currentTranslate.y = originalSquareY + deltaY;
+        
+        task.start.square.transform({
+            rotate: currentRotation,
+            scale: currentScale,
+            translate: [currentTranslate.x, currentTranslate.y],
+            origin: 'center'
+        });
+    }
+});
+
+svg.on("mouseup", () => {
+    isDragging = false;
+});
+
+svg.on("mouseleave", () => {
+    isDragging = false;
 });
 
 // Start the tasks
