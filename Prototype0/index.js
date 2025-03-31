@@ -6,6 +6,7 @@ let svg = SVG().addTo('#main').size("" + canvasSize + "px", "" + canvasSize + "p
 const judge = new Judge(tasksLength, svg, "teamName");
 
 // =========== UI Clean-up: =========== 
+// Move footer buttons into the control panel and style them
 const footer = document.querySelector("footer");
 footer.parentNode.removeChild(footer);
 const control_panel = document.getElementById("control-panel");
@@ -21,17 +22,21 @@ reset_btn.innerHTML = 'Reset';
 next_btn.parentNode.removeChild(next_btn);
 reset_btn.parentNode.removeChild(reset_btn);
 
+// Remove default buttons from the footer and create a custom button container
 const button_container = document.createElement("div");
 button_container.appendChild(next_btn);
 button_container.appendChild(reset_btn);
 button_container.style = 'display: flex; justify-content: space-around; width: 100%;';
 
+// Customize button appearance and layout using inline styles
 next_btn.style = 'background-color: #4CAF50; color: white; border: none; cursor: pointer;';
 reset_btn.style = 'background-color: #f44336; color: white; border: none; cursor: pointer;';
 control_panel.appendChild(button_container);
 
 // =================== SLIDERS SETUP ===================
 
+// Create and style the rotation slider to control the square's rotation
+// Create and style the scale slider to control the square's size
 // ---- Rotation Slider ----
 const rotateLabel = document.createElement("label");
 rotateLabel.innerText = "Rotation:";
@@ -71,6 +76,7 @@ const startColor = "#6677ee";
 const goalColor = "#777";
 const highlightColor = "#ffaa00";  // Highlight color
 
+// Variables to manage transformation state and drag behavior
 // Dragging variables
 let isDragging = false;
 let dragStartX, dragStartY;
@@ -87,6 +93,7 @@ let manipulator = svg.group();
 let goal = svg.group();
 
 // Handle new task
+// Set up event listener to handle each new task from the Judge
 judge.on("newTask", () => {
     task = judge.getCurrentTask();
 
@@ -133,6 +140,7 @@ judge.on("newTask", () => {
         });
     };
 
+    // Add hover effect to indicate interactivity
     // Add highlight on mouse enter
     task.start.square.on("mouseenter", () => {
         task.start.square.stroke({
@@ -150,6 +158,7 @@ judge.on("newTask", () => {
     });
 
     // Drag event handlers specific to this task's square
+    // Store starting drag position on mouse down
     task.start.square.on("mousedown", (e) => {
         isDragging = true;
         
@@ -171,6 +180,7 @@ judge.on("newTask", () => {
 });
 
 // Global mouse move and up events
+// Track mouse movement and update square translation when dragging
 svg.on("mousemove", (e) => {
     if (isDragging && task) {
         // Get the SVG point from the mouse event
@@ -197,10 +207,12 @@ svg.on("mousemove", (e) => {
     }
 });
 
+// Stop dragging on mouse up
 svg.on("mouseup", () => {
     isDragging = false;
 });
 
+// Ensure dragging stops when mouse leaves canvas
 svg.on("mouseleave", () => {
     isDragging = false;
 });
