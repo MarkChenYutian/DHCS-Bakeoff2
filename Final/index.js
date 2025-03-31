@@ -32,11 +32,18 @@ control_panel.appendChild(button_container);
 
 // =================== Refer to HTML elements ===================
 const main_container = document.getElementById("main");
+const dbg_console    = document.getElementById("dbg-console");
 
 // =========== Utility Functions ==============
 
+const remain_task_progress = document.getElementById("remain-task-cnt-prog");
+const remain_task_text     = document.getElementById("remain-task-cnt-text");
 function UpdateProgressBar(judge) {
-    return;
+    const task_number = judge.getTaskNumber() + 1;
+    remain_task_progress.max = tasksLength;
+    remain_task_progress.value = task_number;
+    remain_task_progress.innerHTML = tasksLength - task_number;
+    remain_task_text.innerHTML = `${task_number}/${tasksLength}`;
 }
 
 function getSquareCorners(rect) {
@@ -190,14 +197,14 @@ function setupManipulator(manipulator, manipulate_square) {
         originalSquareY = currentTranslate.y;
     });
 
-    const rotateLine = manipulator.line(center_x, center_y, rotate_controller.cx(), rotate_controller.cy()).stroke({ color: goalColor, width: 2, dasharray: '5,5' });
+    manipulator.line(center_x, center_y, rotate_controller.cx(), rotate_controller.cy()).stroke({ color: goalColor, width: 2, dasharray: '5,5' });
 }
 
 // =========== Main Setup ===========
 
 // Colors
-const startColor = "#6677ee";
-const goalColor = "#777";
+const startColor = "#6677EEAA"; 
+const goalColor = "#707070";
 const highlightColor = "#ffaa00";  // Highlight color
 
 // Dragging variables
@@ -284,7 +291,9 @@ judge.on("newTask", () => {
 });
 
 // Global mouse move and up events
-svg.on("mousemove", (e) => {    
+svg.on("mousemove", (e) => {
+    dbg_console.innerText = `Interaction: ${interaction_type}, isDragging: ${isDragging}, currentScale: ${currentScale}, dragScale: ${dragScale}, OrigSquareX: ${scalingSquareCenterX}, OrigSquareY: ${scalingSquareCenterY}`;
+    
     if (isDragging && task && interaction_type === "translate") {
         // Get the SVG point from the mouse event
         const svgPoint = svg.node.createSVGPoint();
@@ -362,6 +371,9 @@ svg.on("mousemove", (e) => {
             translate: [currentTranslate.x, currentTranslate.y],
             origin: 'center'
         });
+
+        manipulator.clear();
+        setupManipulator(manipulator, task.start.square);
     }
 });
 
@@ -385,6 +397,9 @@ svg.on("mouseleave", () => {
         color: goalColor,
         width: 3 / task.start.square.transform().scaleX
     });
+
+    manipulator.clear();
+    setupManipulator(manipulator, task.start.square);
 });
 
 // Start the tasks

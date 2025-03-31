@@ -61,8 +61,19 @@
 		<div id="main"></div>
 		<div style="flex-grow: 1; min-width: 2rem;"></div>
 		<div style="display: flex; gap: 2rem; flex-direction: column;">
+			<div class="panel">
+				
+				<span class="panel-title">Status Pannel</span>
+				<p style="width: 10rem;">Progress: <span id="remain-task-cnt-text"></span><br/><progress id="remain-task-cnt-prog"></progress></p>
+			</div>
+
 			<div class="panel" id="control-panel">
 				<span class="panel-title">Control</span>
+			</div>
+
+			<div class="panel" id="control-panel" style="display: none;">
+				<span class="panel-title">Debug Console</span>
+				<p style="width: 10rem;" id="dbg-console"></p>
 			</div>
 		</div>
 	</body>
