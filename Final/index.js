@@ -162,12 +162,12 @@ function setupManipulator(manipulator, manipulate_square) {
     );
     
     // Add the rotate manipulator UI to the manipulator group
-    rotate_controller = manipulator.circle(10).fill(goalColor);
+    rotate_controller = manipulator.circle(15).fill(goalColor);
     const direction_vector = {x: (midpoints[0].x - center_x), y: (midpoints[0].y - center_y) };
     const norm = Math.sqrt(direction_vector.x ** 2 + direction_vector.y ** 2);
     rotate_controller.center(
-        midpoints[0].x + (40 / norm) * direction_vector.x,
-        midpoints[0].y + (40 / norm) * direction_vector.y
+        midpoints[0].x + (45 / norm) * direction_vector.x,
+        midpoints[0].y + (45 / norm) * direction_vector.y
     );
     rotate_controller.on("mouseenter", () => {
         rotate_controller.fill(highlightColor);
