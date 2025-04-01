@@ -11,7 +11,7 @@ const controller_handle = document.getElementById("control-state");
 const main_container = document.getElementById("main");
 
 // Initialize the "judge" object with the number of tasks per trial, your svg drawing area, and a team name.
-const judge = new Judge(tasksLength, svg, "teamName");
+const judge = new Judge(tasksLength, svg, "TYE");
 // =========== /end required =========== 
 
 // The original footer button are too ugly, hacked to fix that.

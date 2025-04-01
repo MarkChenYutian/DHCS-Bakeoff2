@@ -3,7 +3,7 @@ const tasksLength = 10; // Set to 10 for Bakeoff
 let svg = SVG().addTo('#main').size("" + canvasSize + "px", "" + canvasSize + "px");
 
 // Initialize Judge
-const judge = new Judge(tasksLength, svg, "teamName");
+const judge = new Judge(tasksLength, svg, "TYE");
 
 // =========== UI Clean-up: =========== 
 // Move footer buttons into the control panel and style them
